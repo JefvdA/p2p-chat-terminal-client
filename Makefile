@@ -1,5 +1,17 @@
 .DEFAULT_GOAL := help
 
+build: ## Build the docker containers used in docker compose
+	@docker compose build
+
+up: ## Create and run all docker instances in the background with docker compose
+	@docker compose up -d
+
+down: ## Stop and remove all docker instances
+	@docker compose down
+
+bash: ## Open a bash in the main docker instance
+	@docker-compose run --rm main bash
+
 test: ## Run all tests and generate coverage report
 	@coverage run -m unittest discover src/tests
 

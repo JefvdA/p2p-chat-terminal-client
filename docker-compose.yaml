@@ -1,0 +1,15 @@
+version: "3.9"
+
+volumes:
+  code:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: src/terminal_client
+
+services:
+  main:
+    build: .
+    volumes:
+      - "code:/usr/src/app/"
