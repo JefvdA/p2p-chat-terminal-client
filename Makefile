@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
 test: ## Run all tests and generate coverage report
-	@coverage run -m unittest
+	@coverage run -m unittest discover src/tests
 
 coverage: ## Display the coverage report in the terminal
 	@coverage report
