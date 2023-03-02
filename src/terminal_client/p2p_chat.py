@@ -17,13 +17,8 @@ def goodbye():
 
 
 @app.command()
-def listen():
-    p2p_client.listen()
-
-
-@app.command()
-def send(ip_address):
-    p2p_client.send(ip_address)
+def start():
+    p2p_client.start()
 
 
 if __name__ == '__main__':

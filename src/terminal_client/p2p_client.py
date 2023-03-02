@@ -1,4 +1,19 @@
 import socket
+import threading
+
+
+def start():
+    # Create threads to run the listen and send functions simultaneously
+    listen_thread = threading.Thread(target=listen)
+    send_thread = threading.Thread(target=send)
+
+    # Start the threads
+    listen_thread.start()
+    send_thread.start()
+
+    # Wait for the threads to complete
+    listen_thread.join()
+    send_thread.join()
 
 
 def listen():
@@ -33,22 +48,22 @@ def listen():
         print(f"Connection from {client_address[0]} closed.")
 
 
-def send(ip_address):
+def send():
     # Set up the socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     # Get the IP address and port number to connect to
+    ip_address = input("Enter the ip address of the other client: >>> ")
     port = 55555  # use the same port number as the server
 
-    try:
-        # Connect to the server
-        sock.connect((ip_address, port))
+    sock.connect((ip_address, port))
+    print(f"Connected to {ip_address}!")
 
-        while True:
-            message = input(">>> ")
+    while True:
+        message = input(">>> ")
+        if message:
             sock.sendall(message.encode('utf-8'))
+        else:
+            break
 
-    finally:
-        # Clean up the connection
-        sock.close()
-
+    sock.close()
