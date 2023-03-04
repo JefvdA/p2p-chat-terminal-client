@@ -7,16 +7,6 @@ app = typer.Typer()
 
 
 @app.command()
-def hello():
-    print("Hello world!")
-
-
-@app.command()
-def goodbye():
-    print("Goodbye world!")
-
-
-@app.command()
 def start():
     p2p_client.start()
 
