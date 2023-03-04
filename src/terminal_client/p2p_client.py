@@ -1,5 +1,8 @@
+import os
 import socket
 import threading
+
+messages = []
 
 
 def start():
@@ -24,21 +27,22 @@ def listen():
     ip_address = ''  # listen on all available network interfaces
     port = 55555  # use any available port
 
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind((ip_address, port))
 
     sock.listen(1)
 
-    print(f"Waiting for connection from other client...")
-
     connection, client_address = sock.accept()
-
-    print(f"Connection from {client_address[0]} received! Waiting...")
 
     try:
         while True:
             data = connection.recv(1024)
             if data:
-                print(f"{client_address[0]}: {data.decode('utf-8')}")
+                messages.append({
+                    "sender": client_address[0],
+                    "message": data.decode('utf-8')
+                })
+                draw()
             else:
                 break
 
@@ -57,13 +61,26 @@ def send():
     port = 55555  # use the same port number as the server
 
     sock.connect((ip_address, port))
-    print(f"Connected to {ip_address}!")
 
     while True:
-        message = input(">>> ")
+        message = input()
         if message:
             sock.sendall(message.encode('utf-8'))
+            messages.append({
+                "sender": 'You',
+                "message": message
+            })
+            draw()
         else:
             break
 
     sock.close()
+
+
+def draw():
+    global messages
+
+    os.system('clear')
+
+    for message in messages[-30:]:
+        print(f"{message['sender']}: {message['message']}")
